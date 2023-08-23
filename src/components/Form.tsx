@@ -9,13 +9,8 @@ const INITIAL_DATA = {
   url: '',
 };
 
-function isPasswordValid(password: string) {
-  const passwordMin8andMax16 = password.length >= 8 && password.length <= 16;
-  const passwordHasLetAndNum = /[a-zA-Z]/.test(password) && /\d/.test(password);
-  const passwordHasCarac = /\W/.test(password);
-  const passwordValid = passwordMin8andMax16 && passwordHasLetAndNum && passwordHasCarac;
-  return passwordValid;
-}
+const INVALID_PASSWORD = 'invalid-password-check';
+const VALID_PASSWORD = 'valid-password-check';
 
 function Form({ handleClick }: FormType) {
   const [inputsData, setInputsData] = useState(INITIAL_DATA);
@@ -23,13 +18,21 @@ function Form({ handleClick }: FormType) {
   const [hasLogin, setHasLogin] = useState(false);
   const [hasName, setHasName] = useState(false);
   const [disabledBtn, setDisabledBtn] = useState(true);
+  const [passwordMin8, setPasswordMin8] = useState(false);
+  const [passwordMax16, setPasswordMax16] = useState(false);
+  const [passwordHasNumAndLet, setPasswordHasNumAndLet] = useState(false);
+  const [passwordHasCarac, setPasswordHasCarac] = useState(false);
 
   const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
 
     if (name === 'password') {
-      const newPassword = value;
-      setPasswordValid(isPasswordValid(newPassword));
+      setPasswordMin8(value.length >= 8);
+      setPasswordMax16(value.length <= 16);
+      setPasswordHasNumAndLet(/[a-zA-Z]/.test(value) && /\d/.test(value));
+      setPasswordHasCarac(/\W/.test(value));
+      setPasswordValid(passwordMin8 && passwordMax16
+        && passwordHasNumAndLet && passwordHasCarac);
     }
     if (name === 'name') {
       setHasName(value.length > 0);
@@ -77,6 +80,30 @@ function Form({ handleClick }: FormType) {
           value={ inputsData.password }
           onChange={ handleChange }
         />
+        <p
+          className={ passwordMin8 ? VALID_PASSWORD : INVALID_PASSWORD }
+        >
+          Possuir 8 ou mais caracteres
+
+        </p>
+        <p
+          className={ passwordMax16 ? VALID_PASSWORD : INVALID_PASSWORD }
+        >
+          Possuir até 16 caracteres
+
+        </p>
+        <p
+          className={ passwordHasNumAndLet ? VALID_PASSWORD : INVALID_PASSWORD }
+        >
+          Possuir letras e números
+
+        </p>
+        <p
+          className={ passwordHasCarac ? VALID_PASSWORD : INVALID_PASSWORD }
+        >
+          Possuir algum caractere especial
+
+        </p>
       </div>
       <div>
         <label htmlFor="url">URL</label>

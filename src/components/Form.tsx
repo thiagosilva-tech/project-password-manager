@@ -1,4 +1,6 @@
-function Form() {
+type FormType = { handleClick: () => void };
+
+function Form({ handleClick }: FormType) {
   return (
     <form>
       <div>
@@ -29,8 +31,8 @@ function Form() {
           id="url"
         />
       </div>
-      <button>Cadastrar</button>
-      <button>Cancelar</button>
+      <button type="button">Cadastrar</button>
+      <button type="button" onClick={ handleClick }>Cancelar</button>
     </form>
   );
 }

@@ -16,6 +16,11 @@ function App() {
     handleClick();
   };
 
+  const handleDelete = (nameDelete: string) => {
+    const newDataDelete = data.filter(({ name }) => name !== nameDelete);
+    setData(newDataDelete);
+  };
+
   const handleClick = () => {
     setShowForm(!showForm);
   };
@@ -25,7 +30,8 @@ function App() {
       {!showForm && <button onClick={ handleClick }>Cadastrar nova senha</button>}
       {showForm && <Form handleClick={ handleClick } setData={ handleData } />}
       {data.length > 0
-        ? <PasswordList listPassword={ data } /> : <p>Nenhuma senha cadastrada</p>}
+        ? <PasswordList listPassword={ data } handleDelete={ handleDelete } />
+        : <p>Nenhuma senha cadastrada</p>}
     </div>
   );
 }

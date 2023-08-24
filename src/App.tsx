@@ -26,6 +26,10 @@ function App() {
     setShowForm(!showForm);
   };
 
+  const showPasswordToggle = () => {
+    setShowPasswords(!showPasswords);
+  };
+
   return (
     <div>
       <h1>Gerenciador de senhas</h1>
@@ -33,7 +37,7 @@ function App() {
       {showForm && <Form handleClick={ handleClick } setData={ handleData } />}
       {data.length > 0
         ? <Main
-            setShowPasswords={ setShowPasswords }
+            setShowPasswords={ showPasswordToggle }
             listPassword={ data }
             handleDelete={ handleDelete }
             showPasswords={ showPasswords }

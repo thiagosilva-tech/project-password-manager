@@ -17,16 +17,22 @@ const INITIAL_DATA = {
 const INVALID_PASSWORD = 'invalid-password-check';
 const VALID_PASSWORD = 'valid-password-check';
 
+function formChecked(inputsData: InputType) {
+  const passwordMin8andMax16 = inputsData.password.length >= 8
+  && inputsData.password.length <= 16;
+  const passwordHasNumAndLet = (/[a-zA-Z].*\d|\d.*[a-zA-Z]/).test(inputsData.password);
+  const passwordHasCarac = ((/(?=.*[!@#$%^&*(),.?":{}|<>]).+$/).test(inputsData.password));
+
+  const passValid = passwordMin8andMax16 && passwordHasNumAndLet && passwordHasCarac;
+  const hasNameAndLogin = inputsData.name.length > 0 && inputsData.login.length > 0;
+
+  const formIsOk = hasNameAndLogin && passValid;
+  return formIsOk;
+}
+
 function Form({ handleClick, setData }: FormType) {
   const [inputsData, setInputsData] = useState(INITIAL_DATA);
-  const [passwordValid, setPasswordValid] = useState(false);
-  const [hasLogin, setHasLogin] = useState(false);
-  const [hasName, setHasName] = useState(false);
   const [disabledBtn, setDisabledBtn] = useState(true);
-  const [passwordMin8, setPasswordMin8] = useState(false);
-  const [passwordMax16, setPasswordMax16] = useState(false);
-  const [passwordHasNumAndLet, setPasswordHasNumAndLet] = useState(false);
-  const [passwordHasCarac, setPasswordHasCarac] = useState(false);
   const [showPassword, setShowPassword] = useState('password');
   const [textShowPass, setTextShowPass] = useState('Mostrar senha');
 
@@ -36,18 +42,7 @@ function Form({ handleClick, setData }: FormType) {
       ...inputsData,
       [name]: value,
     });
-
-    setPasswordMin8(inputsData.password.length >= 8);
-    setPasswordMax16(inputsData.password.length <= 16);
-    const passwordMin8AndMax16 = (passwordMin8 && passwordMax16);
-    setPasswordHasNumAndLet((/[a-zA-Z].*\d|\d.*[a-zA-Z]/).test(inputsData.password));
-    setPasswordHasCarac((/(?=.*[!@#$%^&*(),.?":{}|<>]).+$/).test(inputsData.password));
-    setPasswordValid(passwordMin8AndMax16 && passwordHasNumAndLet && passwordHasCarac);
-    setHasName(inputsData.name.length > 0);
-    setHasLogin(inputsData.login.length > 0);
-
-    const formIsOk = hasLogin && hasName && passwordValid;
-    setDisabledBtn(!formIsOk);
+    setDisabledBtn(!formChecked(inputsData));
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -104,7 +99,7 @@ function Form({ handleClick, setData }: FormType) {
             id="password"
             name="password"
             value={ inputsData.password }
-            onChange={ handleChange }
+            onInput={ handleChange }
           />
           <label htmlFor="showPassword">{ textShowPass }</label>
           <input
@@ -114,16 +109,32 @@ function Form({ handleClick, setData }: FormType) {
             id="showPassword"
             onClick={ handleShowPassword }
           />
-          <p className={ passwordMin8 ? VALID_PASSWORD : INVALID_PASSWORD }>
+          <p
+            className={ inputsData.password.length >= 8
+              ? VALID_PASSWORD
+              : INVALID_PASSWORD }
+          >
             Possuir 8 ou mais caracteres
           </p>
-          <p className={ passwordMax16 ? VALID_PASSWORD : INVALID_PASSWORD }>
+          <p
+            className={ inputsData.password.length <= 16
+              ? VALID_PASSWORD
+              : INVALID_PASSWORD }
+          >
             Possuir até 16 caracteres
           </p>
-          <p className={ passwordHasNumAndLet ? VALID_PASSWORD : INVALID_PASSWORD }>
+          <p
+            className={ (/[a-zA-Z].*\d|\d.*[a-zA-Z]/).test(inputsData.password)
+              ? VALID_PASSWORD
+              : INVALID_PASSWORD }
+          >
             Possuir letras e números
           </p>
-          <p className={ passwordHasCarac ? VALID_PASSWORD : INVALID_PASSWORD }>
+          <p
+            className={ (/(?=.*[!@#$%^&*(),.?":{}|<>]).+$/).test(inputsData.password)
+              ? VALID_PASSWORD
+              : INVALID_PASSWORD }
+          >
             Possuir algum caractere especial
           </p>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { InputType } from '../types';
 
 type FormType = {
@@ -26,6 +27,8 @@ function Form({ handleClick, setData }: FormType) {
   const [passwordMax16, setPasswordMax16] = useState(false);
   const [passwordHasNumAndLet, setPasswordHasNumAndLet] = useState(false);
   const [passwordHasCarac, setPasswordHasCarac] = useState(false);
+  const [showPassword, setShowPassword] = useState('password');
+  const [textShowPass, setTextShowPass] = useState('Mostrar senha');
 
   const handleChange = (event:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -51,6 +54,24 @@ function Form({ handleClick, setData }: FormType) {
     event.preventDefault();
     setData(inputsData);
     setInputsData(INITIAL_DATA);
+  };
+
+  const handleShowPassword = (event: React.MouseEvent<HTMLInputElement>) => {
+    if (event.currentTarget.checked) {
+      setTextShowPass('Esconder senha');
+      setShowPassword('text');
+    } else {
+      setTextShowPass('Mostrar senha');
+      setShowPassword('password');
+    }
+  };
+
+  const handleAlert = () => {
+    Swal.fire({
+      icon: 'success',
+      title: 'Serviço cadastrado com sucesso',
+      timer: 1500,
+    });
   };
 
   return (
@@ -79,11 +100,19 @@ function Form({ handleClick, setData }: FormType) {
         <div>
           <label htmlFor="password">Senha</label>
           <input
-            type="password"
+            type={ showPassword }
             id="password"
             name="password"
             value={ inputsData.password }
             onChange={ handleChange }
+          />
+          <label htmlFor="showPassword">{ textShowPass }</label>
+          <input
+            data-testid="show-hide-form-password"
+            type="checkbox"
+            name="showPassword"
+            id="showPassword"
+            onClick={ handleShowPassword }
           />
           <p className={ passwordMin8 ? VALID_PASSWORD : INVALID_PASSWORD }>
             Possuir 8 ou mais caracteres
@@ -108,7 +137,13 @@ function Form({ handleClick, setData }: FormType) {
             onChange={ handleChange }
           />
         </div>
-        <button disabled={ disabledBtn } type="submit">Cadastrar</button>
+        <button
+          disabled={ disabledBtn }
+          onClick={ handleAlert }
+          type="submit"
+        >
+          Cadastrar
+        </button>
         <button type="button" onClick={ handleClick }>Cancelar</button>
       </form>
     </main>

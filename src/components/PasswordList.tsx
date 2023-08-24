@@ -3,9 +3,10 @@ import { InputType } from '../types';
 type PasswordListType = {
   listPassword: InputType[],
   handleDelete: (nameDelete: string) => void,
+  showPasswords: boolean,
 };
 
-function PasswordList({ listPassword, handleDelete }: PasswordListType) {
+function PasswordList({ listPassword, handleDelete, showPasswords }: PasswordListType) {
   return (
     <div>
       { listPassword.map(({ name, url, login, password }) => {
@@ -13,7 +14,11 @@ function PasswordList({ listPassword, handleDelete }: PasswordListType) {
           <div key={ name }>
             <a href={ url }>{name}</a>
             <p>{login}</p>
-            <p>{password}</p>
+            <p>
+              {
+            showPasswords ? password : '******'
+            }
+            </p>
             <button
               data-testid="remove-btn"
               onClick={ () => handleDelete(name) }

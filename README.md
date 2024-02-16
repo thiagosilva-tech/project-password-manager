@@ -1,4 +1,4 @@
-# Projeto Gerenciador de Senhas
+# Projeto Password Manager
 
 Este projeto é uma aplicação que permite aos usuários gerenciar suas senhas de forma segura e eficiente. O objetivo é praticar a escrita de funções JavaScript, incluindo o uso de parâmetros, retorno de valores, e casos de teste.
 

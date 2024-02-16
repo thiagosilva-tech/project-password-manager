@@ -4,7 +4,7 @@ Este projeto é uma aplicação que permite aos usuários gerenciar suas senhas 
 
 ## Tecnologias Utilizadas
 
-- JavaScript: Utilizado para implementar as funções.
+- TypeScript: Utilizado para implementar as funções.
 - React.js: Uma biblioteca JavaScript para criar interfaces de usuário.
 - CSS: Usado para estilizar os componentes da aplicação.
 
